@@ -22,6 +22,7 @@ public class UserController {
         userService.initRolesAndUser();//run when runnuning
     }
 
+
     @PostMapping({"/registerNewUser"})
     public User registerNewUser(@RequestBody User user){
         return userService.registerNewUser(user);
