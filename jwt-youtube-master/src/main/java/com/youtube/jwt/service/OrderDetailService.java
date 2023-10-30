@@ -1,6 +1,7 @@
 package com.youtube.jwt.service;
 
 import com.youtube.jwt.configuration.JwtRequestFilter;
+import com.youtube.jwt.dao.CartDao;
 import com.youtube.jwt.dao.OrderDetailDao;
 import com.youtube.jwt.dao.ProductDao;
 import com.youtube.jwt.dao.UserDao;
@@ -24,7 +25,10 @@ public class OrderDetailService {
     @Autowired
     private UserDao userDao;
 
-    public void placeOrder(OrderInput orderInput){
+    @Autowired
+    private CartDao cartDao;
+
+    public void placeOrder(OrderInput orderInput,boolean isSingleProductCheckout){
         List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();
 
         for(OrderProductQuantity o:productQuantityList){
@@ -44,7 +48,10 @@ public class OrderDetailService {
                     product,
                     user
             );
-
+            if(!isSingleProductCheckout){
+                List<Cart> carts = cartDao.findByUser(user);
+                carts.stream().forEach(x->cartDao.deleteById(x.getCartId()));
+            }
             orderDetailDao.save(orderDetail);
         }
     }
