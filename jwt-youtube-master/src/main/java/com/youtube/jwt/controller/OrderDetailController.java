@@ -27,4 +27,10 @@ public class OrderDetailController {
     public List<OrderDetail> getOrderDetails(){
         return orderDetailService.getOrderDetails();
     }
+    @PreAuthorize("hasRole('Admin')")
+    @GetMapping("/getAllOrderDetails")
+    public List<OrderDetail> getAllOrderDetails(){
+        return orderDetailService.getAllOrderDetails();
+    }
+
 }
